@@ -1,15 +1,22 @@
 <template>
-    <div>
-        Hello Cinema
-    </div>
+  <div id="main">
+    <Header />
+    <TabBar />
+  </div>
 </template>
 
 <script>
+import Header from "@/components/Header";
+import TabBar from "@/components/TabBar";
+
 export default {
-    name: "Ciname"
-}
+  name: "Ciname",
+  components: {
+    Header,
+    TabBar,
+  },
+};
 </script>
 
 <style>
-
 </style>
