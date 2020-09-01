@@ -1,30 +1,32 @@
 <template>
   <div class="cinema_body">
-    <ul>
-      <li v-for="movie in movieList" :key="movie.id">
-        <div>
-          <span>{{movie.name.replace('（', '(')}}&nbsp;&nbsp;</span>
-          <span v-if="movie.price" class="q">
-            <span class="price">{{movie.price}}</span> 元起
-          </span>
-        </div>
-        <div class="address">
-          <span>{{movie.address}}</span>
-          <span>{{movie.distance}}</span>
-        </div>
-        <div class="card">
-          <div v-if="movie.allowRefund" class="bl">退</div>
-          <div v-if="movie.endorse" class="bl">改签</div>
-          <div v-if="movie.snack" class="or">小吃</div>
-          <div v-if="movie.vipTag" class="or">折扣卡</div>
-          <div v-for="type in movie.hallType" :key="type" class="bl">{{type}}</div>
-        </div>
-        <div v-if="movie.discount" class="discount">
-          <img src="//p1.meituan.net/scarlett/ff1c6e33ed0ac3cd862910a83d4bf959583.png" />
-          <span>开卡特惠，首单2张最高立减2元</span>
-        </div>
-      </li>
-    </ul>
+    <Scroller ref="scroller">
+      <ul>
+        <li v-for="movie in movieList" :key="movie.id">
+          <div>
+            <span>{{movie.name.replace('（', '(')}}&nbsp;&nbsp;</span>
+            <span v-if="movie.price" class="q">
+              <span class="price">{{movie.price}}</span> 元起
+            </span>
+          </div>
+          <div class="address">
+            <span>{{movie.address}}</span>
+            <span>{{movie.distance}}</span>
+          </div>
+          <div class="card">
+            <div v-if="movie.allowRefund" class="bl">退</div>
+            <div v-if="movie.endorse" class="bl">改签</div>
+            <div v-if="movie.snack" class="or">小吃</div>
+            <div v-if="movie.vipTag" class="or">折扣卡</div>
+            <div v-for="type in movie.hallType" :key="type" class="bl">{{type}}</div>
+          </div>
+          <div v-if="movie.discount" class="discount">
+            <img src="//p1.meituan.net/scarlett/ff1c6e33ed0ac3cd862910a83d4bf959583.png" />
+            <span>开卡特惠，首单2张最高立减2元</span>
+          </div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
@@ -44,6 +46,7 @@ export default {
         var data = parser.parseFromString(res.data, "text/html");
         var Atags = data.getElementsByTagName("a");
         this.parserA(Atags);
+        this.$refs.scroller.scroll.refresh();
       });
   },
   methods: {
@@ -82,12 +85,14 @@ export default {
           }
         }
         if (Atags[i].querySelector("div.discount-block").innerHTML.trim()) {
-          console.log(Atags[i].querySelector("div.discount-block").innerHTML);
           movie.discount = true;
         }
         this.movieList.push(movie);
       }
     },
+  },
+  activated() {
+    this.$refs.scroller.scroll.refresh();
   },
 };
 </script>

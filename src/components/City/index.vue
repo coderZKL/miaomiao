@@ -1,20 +1,24 @@
 <template>
   <div class="city_body">
     <div class="city_list">
-      <div class="city_hot">
-        <h2>热门城市</h2>
-        <ul class="clearfix">
-          <li v-for="city in hotList" :key="city.id" @click="handleCity(city)">{{city.nm}}</li>
-        </ul>
-      </div>
-      <div class="city_sort" ref="city_sort">
-        <div v-for="cities in cityList" :key="cities.index">
-          <h2>{{cities.index}}</h2>
-          <ul>
-            <li v-for="city in cities.list" :key="city.id" @click="handleCity(city)">{{city.nm}}</li>
-          </ul>
+      <Scroller ref="scroller">
+        <div>
+          <div class="city_hot">
+            <h2>热门城市</h2>
+            <ul class="clearfix">
+              <li v-for="city in hotList" :key="city.id" @click="handleCity(city)">{{city.nm}}</li>
+            </ul>
+          </div>
+          <div class="city_sort" ref="city_sort">
+            <div v-for="cities in cityList" :key="cities.index">
+              <h2>{{cities.index}}</h2>
+              <ul>
+                <li v-for="city in cities.list" :key="city.id" @click="handleCity(city)">{{city.nm}}</li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
+      </Scroller>
     </div>
     <div class="city_index">
       <ul>
@@ -43,6 +47,7 @@ export default {
       var { cityList, hotList } = this.formatCityList(cities);
       this.cityList = cityList;
       this.hotList = hotList;
+      this.$refs.scroller.scroll.refresh();
     });
   },
   methods: {
@@ -142,7 +147,8 @@ export default {
     },
     handleToIndex(index) {
       var h2 = this.$refs.city_sort.getElementsByTagName("h2");
-      this.$refs.city_sort.parentNode.scrollTop = h2[index].offsetTop;
+      // this.$refs.city_sort.parentNode.scrollTop = h2[index].offsetTop;
+      this.$refs.scroller.toScrollTop(-h2[index].offsetTop);
     },
     handleCity(city) {
       var id = city.id;
@@ -156,6 +162,9 @@ export default {
         path: "/movie/nowplaying",
       });
     },
+  },
+  activated() {
+    this.$refs.scroller.scroll.refresh();
   },
 };
 </script>

@@ -4,10 +4,10 @@
     <div id="content">
       <div class="movie_menu">
         <router-link tag="div" to="/movie/city" class="city_name">
-          <span>{{getCity}}</span>
+          <span>{{$store.state.city}}</span>
           <i class="iconfont icon-lower-triangle"></i>
         </router-link>
-        <div class="hot_swtich">
+        <div class="hot_swtich" :key="$store.state.id">
           <router-link tag="div" to="/movie/nowplaying" class="hot_item">正在热映</router-link>
           <router-link tag="div" to="/movie/comingsoon" class="hot_item">即将上映</router-link>
         </div>
@@ -32,11 +32,6 @@ export default {
   components: {
     Header,
     TabBar,
-  },
-  computed: {
-    getCity() {
-      return this.$store.state.city;
-    },
   },
 };
 </script>
