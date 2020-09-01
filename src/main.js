@@ -9,6 +9,11 @@ Vue.prototype.axios = axios;
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 
+import Scroller from '@/components/Scroller'
+import Loading from '@/components/Loading'
+Vue.component('Scroller', Scroller);
+Vue.component('Loading', Loading);
+
 Vue.config.productionTip = false;
 
 new Vue({

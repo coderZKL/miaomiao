@@ -1,30 +1,33 @@
 <template>
   <div class="movie_body">
-    <ul>
-      <li v-for="movie in movieList" :key="movie.id">
-        <div class="pic_show">
-          <img :src="movie.img | img" />
-        </div>
-        <div class="info_list">
-          <h2>
-            <span>{{movie.nm}}</span>
-            <img v-if="movie.version" :src="movie.version | type" alt />
-            <img v-if="movie.preShow" src="/images/4.png" alt />
-          </h2>
-          <p>
-            <span class="grade">{{movie.wish}}</span> 人想看
-          </p>
-          <p v-if="movie.star">主演: {{movie.star}}</p>
-          <p>{{movie.rt}}上映</p>
-        </div>
-        <div v-if="movie.showst == 1" class="btn_mall">想看</div>
-        <div v-else class="btn_pre">预售</div>
-      </li>
-    </ul>
+    <Scroller ref="scroller">
+      <ul>
+        <li v-for="movie in movieList" :key="movie.id">
+          <div class="pic_show">
+            <img :src="movie.img | img" />
+          </div>
+          <div class="info_list">
+            <h2>
+              <span>{{movie.nm}}</span>
+              <img v-if="movie.version" :src="movie.version | type" alt />
+              <img v-if="movie.preShow" src="/images/4.png" alt />
+            </h2>
+            <p>
+              <span class="grade">{{movie.wish}}</span> 人想看
+            </p>
+            <p v-if="movie.star">主演: {{movie.star}}</p>
+            <p>{{movie.rt}}上映</p>
+          </div>
+          <div v-if="movie.showst == 1" class="btn_mall">想看</div>
+          <div v-else class="btn_pre">预售</div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
 <script>
+import Scroller from "@/components/Scroller";
 export default {
   name: "ComingSoon",
   data() {
@@ -41,6 +44,7 @@ export default {
         } else {
           this.$router.push({ path: "/movie/city" });
         }
+        this.$refs.scroller.scroll.refresh();
       });
     },
   },
@@ -62,6 +66,12 @@ export default {
         return "/images/3.png";
       }
     },
+  },
+  activated() {
+    this.$refs.scroller.scroll.refresh();
+  },
+  mounted() {
+    this.$refs.scroller.scroll.refresh();
   },
 };
 </script>

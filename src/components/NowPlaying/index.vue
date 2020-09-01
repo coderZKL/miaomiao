@@ -1,26 +1,30 @@
 <template>
-  <div class="movie_body">
-    <ul>
-      <li v-for="movie in movieList" :key="movie.id">
-        <div class="pic_show">
-          <img :src="movie.img | img" />
-        </div>
-        <div class="info_list">
-          <h2>
-            <span>{{movie.nm}}</span>
-            <img v-if="movie.version" :src="movie.version | type" alt />
-            <img v-if="movie.preShow" src="/images/4.png" alt />
-          </h2>
-          <p>
-            观众评
-            <span class="grade">{{movie.sc}}</span>
-          </p>
-          <p>主演: {{movie.star}}</p>
-          <p>{{movie.showInfo}}</p>
-        </div>
-        <div class="btn_mall">购票</div>
-      </li>
-    </ul>
+  <div class="movie_body" ref="movie_body">
+    <Loading v-if="isLoading" />
+    <Scroller :handleToTouchEnd="handleToTouchEnd" :handleToScroll="handleToScroll" ref="scroller">
+      <ul>
+        <li class="pullDown">{{pullDownMsg}}</li>
+        <li v-for="movie in movieList" :key="movie.id">
+          <div class="pic_show" @tap="handleToDetail">
+            <img :src="movie.img | img" />
+          </div>
+          <div class="info_list">
+            <h2>
+              <span>{{movie.nm}}</span>
+              <img v-if="movie.version" :src="movie.version | type" alt />
+              <img v-if="movie.preShow" src="/images/4.png" alt />
+            </h2>
+            <p>
+              观众评
+              <span class="grade">{{movie.sc}}</span>
+            </p>
+            <p>主演: {{movie.star}}</p>
+            <p>{{movie.showInfo}}</p>
+          </div>
+          <div class="btn_mall">购票</div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
@@ -30,6 +34,8 @@ export default {
   data() {
     return {
       movieList: [],
+      pullDownMsg: "",
+      isLoading: true,
     };
   },
   methods: {
@@ -38,13 +44,33 @@ export default {
         .get("/ajax/movieOnInfoList", { withCredentials: true })
         .then((res) => {
           this.movieList = res.data.movieList;
+          this.$refs.scroller.scroll.refresh();
+          this.isLoading = false;
         });
     },
-  },
-  beforeRouteEnter(from, to, next) {
-    next((vm) => {
-      vm.getMovieList();
-    });
+    handleToDetail() {
+      console.log("handleToDetail");
+    },
+    handleToScroll(pos) {
+      if (pos.y > 30) {
+        this.pullDownMsg = "正在更新中";
+        this.isLoading = true;
+      }
+    },
+    handleToTouchEnd(pos) {
+      if (pos.y > 30) {
+        this.axios
+          .get("/ajax/movieOnInfoList", { withCredentials: true })
+          .then((res) => {
+            this.pullDownMsg = "更新成功";
+            setTimeout(() => {
+              this.movieList = res.data.movieList;
+              this.pullDownMsg = "";
+              this.isLoading = false;
+            }, 1000);
+          });
+      }
+    },
   },
   filters: {
     img(value) {
@@ -59,6 +85,17 @@ export default {
         return "/images/3.png";
       }
     },
+  },
+  beforeRouteEnter(from, to, next) {
+    next((vm) => {
+      vm.getMovieList();
+    });
+  },
+  activated() {
+    this.$refs.scroller.scroll.refresh();
+  },
+  mounted() {
+    this.$refs.scroller.scroll.refresh();
   },
 };
 </script>
@@ -138,5 +175,10 @@ export default {
 }
 .movie_body .btn_pre {
   background-color: #3c9fe6;
+}
+.movie_body .pullDown {
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 </style>
