@@ -3,11 +3,11 @@
     <Scroller ref="scroller">
       <ul>
         <li v-for="movie in movieList" :key="movie.id">
-          <div class="pic_show">
+          <div class="pic_show" @tap="handleToDetail(movie.id)">
             <img :src="movie.img | img" />
           </div>
           <div class="info_list">
-            <h2>
+            <h2 @tap="handleToDetail(movie.id)">
               <span>{{movie.nm}}</span>
               <img v-if="movie.version" :src="movie.version | type" alt />
               <img v-if="movie.preShow" src="/images/4.png" alt />
@@ -18,8 +18,8 @@
             <p v-if="movie.star">主演: {{movie.star}}</p>
             <p>{{movie.rt}}上映</p>
           </div>
-          <div v-if="movie.showst == 1" class="btn_mall">想看</div>
-          <div v-else class="btn_pre">预售</div>
+          <div v-if="movie.showst == 1" class="btn_mall" @tap="handleToDetail(movie.id)">想看</div>
+          <div v-else class="btn_pre" @tap="handleToDetail(movie.id)">预售</div>
         </li>
       </ul>
     </Scroller>
@@ -46,6 +46,9 @@ export default {
         }
         this.$refs.scroller.scroll.refresh();
       });
+    },
+    handleToDetail(id) {
+      this.$router.push(`/movie/detail/2/${id}`);
     },
   },
   beforeRouteEnter(from, to, next) {

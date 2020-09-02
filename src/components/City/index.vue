@@ -5,15 +5,15 @@
         <div>
           <div class="city_hot">
             <h2>热门城市</h2>
-            <ul class="clearfix">
-              <li v-for="city in hotList" :key="city.id" @click="handleCity(city)">{{city.nm}}</li>
+            <ul class="clearfix"> 
+              <li v-for="city in hotList" :key="city.id" @tap="handleCity(city)">{{city.nm}}</li>
             </ul>
           </div>
           <div class="city_sort" ref="city_sort">
             <div v-for="cities in cityList" :key="cities.index">
               <h2>{{cities.index}}</h2>
               <ul>
-                <li v-for="city in cities.list" :key="city.id" @click="handleCity(city)">{{city.nm}}</li>
+                <li v-for="city in cities.list" :key="city.id" @tap="handleCity(city)">{{city.nm}}</li>
               </ul>
             </div>
           </div>

@@ -5,11 +5,11 @@
       <ul>
         <li class="pullDown">{{pullDownMsg}}</li>
         <li v-for="movie in movieList" :key="movie.id">
-          <div class="pic_show" @tap="handleToDetail">
+          <div class="pic_show" @tap="handleToDetail(movie.id)">
             <img :src="movie.img | img" />
           </div>
           <div class="info_list">
-            <h2>
+            <h2 @tap="handleToDetail(movie.id)">
               <span>{{movie.nm}}</span>
               <img v-if="movie.version" :src="movie.version | type" alt />
               <img v-if="movie.preShow" src="/images/4.png" alt />
@@ -21,7 +21,7 @@
             <p>主演: {{movie.star}}</p>
             <p>{{movie.showInfo}}</p>
           </div>
-          <div class="btn_mall">购票</div>
+          <div class="btn_mall" @tap="handleToDetail(movie.id)">购票</div>
         </li>
       </ul>
     </Scroller>
@@ -48,8 +48,8 @@ export default {
           this.isLoading = false;
         });
     },
-    handleToDetail() {
-      console.log("handleToDetail");
+    handleToDetail(id) {
+      this.$router.push(`/movie/detail/1/${id}`);
     },
     handleToScroll(pos) {
       if (pos.y > 30) {
